@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume Builder — Jaswanth Rachamalla</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2a1 1 0 0 1 1 1v10.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 1.414-1.414L11 13.586V3a1 1 0 0 1 1-1zM4 20a1 1 0 0 1 1-1h14a1 1 0 0 1 0 2H5a1 1 0 0 1-1-1z'/></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Cambria&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322c55e'><path d='M12 2a1 1 0 0 1 1 1v10.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 1.414-1.414L11 13.586V3a1 1 0 0 1 1-1zM4 20a1 1 0 0 1 1-1h14a1 1 0 0 １-1-１z'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cambria&family=EB+Garamond:ital,wght@0,400;0,600;0,700;１,400&family=DM+Sans:wght@400;500;60０;7００&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1a1a;
+    --ink: #1a1a１a;
     --ink-soft: #3d3d3d;
     --ink-muted: #6b6b6b;
     --border: #d4d0c8;
@@ -166,6 +166,73 @@
   }
   .gen-btn:hover { background: #1e3560; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(44,74,124,0.25); }
 
+  /* ── PASTE BUTTON ── */
+  .paste-btn {
+    margin-top: 10px;
+    width: 100%;
+    background: var(--surface);
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    letter-spacing: 0.2px;
+  }
+  .paste-btn:hover { background: var(--accent-light); border-color: var(--accent); transform: translateY(-1px); }
+  .paste-btn:active { transform: translateY(0); }
+
+  /* ── WORKDAY COPY BUTTONS ── */
+  .workday-row {
+    max-width: 860px;
+    margin: 0 auto 0;
+    padding: 0 24px;
+    display: none;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .workday-row.visible { display: flex; flex-wrap: nowrap; margin-bottom: 18px; margin-top: 16px; gap: 8px; align-items: center; }
+  .exp-copy-btn {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .exp-copy-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .exp-copy-btn.copied { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.5); color: #16a34a; }
+  .exp-copy-btn .co-icon {
+    width: 20px; height: 20px; border-radius: 4px;
+    background: var(--accent); color: white;
+    font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; letter-spacing: -0.5px;
+  }
+  .exp-copy-btn.copied .co-icon { background: #16a34a; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(10px);
+    background: #1a1a2e; color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: 10px;
+    opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   /* ── DIVIDER ── */
   .divider {
     max-width: 860px;
@@ -264,6 +331,12 @@
     font-family: 'Cambria', Georgia, serif;
   }
   .mock-cert-line::before { content: '–'; color: #666; flex-shrink: 0; }
+  .mock-achievement-head {
+    font-size: 11px; font-weight: 700; font-style: italic;
+    letter-spacing: 0.8px; color: #444; text-transform: none;
+    margin-top: 8px; margin-bottom: 3px;
+    font-family: 'Cambria', Georgia, serif;
+  }
 </style>
 </head>
 <body>
@@ -295,6 +368,15 @@
   <button class="gen-btn" onclick="updatePreview()">
     ✦ Generate Resume Preview
   </button>
+  <button class="paste-btn" onclick="pasteIntoTextarea()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    Paste from Clipboard
+  </button>
+</div>
+
+<!-- WORKDAY COPY ROW -->
+<div class="workday-row" id="workday-row">
+
 </div>
 
 <!-- DIVIDER -->
@@ -399,8 +481,10 @@ function updatePreview() {
     html += `<div class="mock-section-head">Professional Experience</div>`;
     experience.split('\n').filter(l => l.trim()).forEach(line => {
       const t = line.trim();
-      if (/^[-•*]/.test(t)) {
-        html += `<div class="mock-bullet">${escHtml(t.replace(/^[-•*]\s*/,''))}</div>`;
+      if (/^key achievements[:\s]*/i.test(t)) {
+        html += `<div class="mock-achievement-head">Key Achievements</div>`;
+      } else if (/^[-•*◦]/.test(t)) {
+        html += `<div class="mock-bullet">${escHtml(t.replace(/^[-•*◦]\s*/,''))}</div>`;
       } else if (t.includes('|')) {
         const parts = t.split('|').map(p => p.trim());
         // parts: company | location | role | date  OR  company | role | date
@@ -444,6 +528,9 @@ function updatePreview() {
   }
 
   mockup.innerHTML = html;
+
+  // Update workday copy buttons if function is available
+  if (typeof buildWorkdayRow === 'function') buildWorkdayRow(experience);
 }
 
 function escHtml(str) {
@@ -23547,6 +23634,128 @@ function saveAs(blob, filename) {
 function ensureLibs() { return Promise.resolve(); }
 </script>
 
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── PASTE FROM CLIPBOARD ──
+async function pasteIntoTextarea() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (!text.trim()) { showToast('Clipboard is empty'); return; }
+    const ta = document.getElementById('resume-text');
+    ta.value = text;
+    detectSections();
+    updatePreview();
+    showToast('✓ Pasted & preview updated');
+  } catch (e) {
+    // Fallback: focus textarea so user can Ctrl+V manually
+    document.getElementById('resume-text').focus();
+    showToast('Press Ctrl+V / ⌘V to paste');
+  }
+}
+
+// ── WORKDAY COPY BUTTONS ──
+function parseExperienceCompanies(expRaw) {
+  if (!expRaw) return [];
+  const companies = [];
+  let current = null;
+
+  expRaw.split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) return;
+
+    if (t.includes('|')) {
+      // New company header
+      if (current) companies.push(current);
+      const parts = t.split('|').map(p => p.trim());
+      current = { name: parts[0], bullets: [] };
+      return;
+    }
+
+    if (current) {
+      // Key achievements header — treat as label, not bullet
+      if (/^key achievements[:\s]*/i.test(t)) {
+        current.bullets.push({ isAchHead: true });
+        return;
+      }
+      // Bullet: • or - or numbered (1. 2.)
+      if (/^[-•*◦]/.test(t)) {
+        current.bullets.push({ text: t.replace(/^[-•*◦]\s*/, '') });
+      } else if (/^\d+[\.\)]\s/.test(t)) {
+        current.bullets.push({ text: t.replace(/^\d+[\.\)]\s*/, '') });
+      }
+    }
+  });
+  if (current) companies.push(current);
+  return companies;
+}
+
+function getInitials(name) {
+  const clean = name.replace(/\s*\(.*?\)/g, '').trim();
+  const words = clean.split(/\s+/).filter(Boolean);
+  return words.slice(0, 2).map(w => w[0].toUpperCase()).join('');
+}
+
+function buildWorkdayRow(expRaw) {
+  const row = document.getElementById('workday-row');
+  const companies = parseExperienceCompanies(expRaw);
+
+  if (!companies.length) {
+    row.classList.remove('visible');
+    return;
+  }
+
+  // Remove old buttons (keep label)
+  row.querySelectorAll('.exp-copy-btn').forEach(b => b.remove());
+
+  companies.forEach((co, idx) => {
+    const totalBullets = co.bullets.filter(b => !b.isAchHead).length;
+    const btn = document.createElement('button');
+    btn.className = 'exp-copy-btn';
+    btn.id = `co-btn-${idx}`;
+    btn.innerHTML = `<span class="co-icon">${getInitials(co.name)}</span>${co.name}`;
+    btn.onclick = () => copyCompanyBullets(co, btn);
+    row.appendChild(btn);
+  });
+
+  row.classList.add('visible');
+}
+
+function copyCompanyBullets(co, btn) {
+  const lines = [];
+  let inAch = false;
+  co.bullets.forEach(b => {
+    if (b.isAchHead) {
+      lines.push('Key Achievements');
+      inAch = true;
+      return;
+    }
+    lines.push('• ' + b.text);
+  });
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<span class="co-icon" style="background:#16a34a">✓</span> Copied!`;
+    showToast(`✓ ${co.name} bullets copied`);
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      const count = co.bullets.filter(b => !b.isAchHead).length;
+      btn.innerHTML = `<span class="co-icon">${getInitials(co.name)}</span>${co.name}`;
+    }, 2000);
+  });
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+
 <script>
 document.getElementById('dl-btn').onclick = async () => {
   const raw = document.getElementById('resume-text').value.trim();
@@ -23604,7 +23813,10 @@ document.getElementById('dl-btn').onclick = async () => {
       if (!raw) return [];
       return raw.split('\n').filter(l=>l.trim()).map(line => {
         const t = line.trim();
-        if (/^[-•*]/.test(t)) return bullet(t.replace(/^[-•*]\s*/,''));
+        if (/^key achievements[:\s]*/i.test(t)) {
+          return new Paragraph({ spacing:{before:100,after:30}, children:[new TextRun({text:"Key Achievements", bold:true, italics:true, font:"Cambria", size:20, color:"444444"})] });
+        }
+        if (/^[-•*◦]/.test(t)) return bullet(t.replace(/^[-•*◦]\s*/,''));
         if (t.includes('|')) {
           const parts = t.split('|').map(p=>p.trim());
           const rows = [];
