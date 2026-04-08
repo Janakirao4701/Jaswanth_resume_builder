@@ -439,12 +439,7 @@ function updatePreview() {
   const raw = document.getElementById('resume-text').value.trim();
   const mockup = document.getElementById('resume-mockup');
 
-  if (!raw) {
-    mockup.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>Paste your resume content above to see a live preview here</p></div>`;
-    return;
-  }
-
-  const { summary, skills, experience } = parseContent(raw);
+  const { summary, skills, experience } = raw ? parseContent(raw) : { summary: '', skills: '', experience: '' };
   let html = '';
 
   // ── Header
@@ -458,6 +453,10 @@ function updatePreview() {
   </div>`;
 
   // ── Summary
+  if (!raw) {
+    html += `<div style="text-align:center;color:#bbb;font-size:12px;font-family:'DM Sans',sans-serif;margin:18px 0 10px;font-style:italic;">Paste your resume content above to fill in Summary, Skills & Experience</div>`;
+  }
+
   if (summary) {
     html += `<div class="mock-section-head">Professional Summary</div>`;
     html += `<div class="mock-text">${escHtml(summary)}</div>`;
@@ -23757,6 +23756,9 @@ function showToast(msg) {
 </script>
 
 <script>
+// Show education + profile on page load
+updatePreview();
+
 document.getElementById('dl-btn').onclick = async () => {
   const raw = document.getElementById('resume-text').value.trim();
   if (!raw) { alert('Please paste your resume content first.'); return; }
